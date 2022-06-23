@@ -19,6 +19,7 @@ ProcessTag Project;
 
 int currentRow = 1;
 int count = 0;
+int CONECTOR = 27;
 
 void processMatrix(String matrix[][4])
 {
@@ -36,7 +37,7 @@ void processMatrix(String matrix[][4])
       Serial.print(j);
       Serial.print(":");
       Serial.println(matrix[i][j]);
-      
+
       String aux = matrix[i][j];
       aux.remove(aux.length() - 2);
       a[i][j] = aux.toInt();
@@ -54,15 +55,17 @@ NfcAdapter nfc = NfcAdapter(pn532spi);
 
 void setup(void)
 {
-  Project.setupLCD();
-
+  //  Project.setupLCD();
+  pinMode(CONECTOR, OUTPUT);
+  digitalWrite(CONECTOR, HIGH);
+  Project.setupLCD();  
   Serial.begin(9600);
   Serial.println("* Verificação Modulos PN532 NFC RFID *");
   nfc.begin();
 }
 
 void loop(void)
-{ 
+{
   column = "";
 
   delay(400);
@@ -93,7 +96,7 @@ void loop(void)
     }
   }
   delay(200);
-  
+
   if (column != "")
   {
     // Se o primeiro termo da currentRow analisado for diferente do primeiro termo da proxima currentRow analisada

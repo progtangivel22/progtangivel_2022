@@ -118,8 +118,7 @@ int M_A2 = 25; //motor a = -
 int M_B1 = 32; //motor b = -
 int M_B2 = 33; //motor b = +
 int S_B = 30;  //speed motor b
-int LED1 = 13;
-int LED2 = 14;
+int LED = 13;
 int buzzer = 12;
 const int potPin = 34;
 
@@ -255,10 +254,10 @@ void tocar(int melody[], int tamanho) {
 void robot_frente()
 {
   Serial.println("Frente\n");
-  analogWrite(M_A1, 0);
-  analogWrite(M_A2, 0);
-  analogWrite(M_B1, 255);
-  analogWrite(M_B2, 0);
+  digitalWrite(M_A1, LOW);
+  digitalWrite(M_A2, HIGH);
+  digitalWrite(M_B1, HIGH);
+  digitalWrite(M_B2, LOW);
 }
 
 void robot_tras()
@@ -314,15 +313,13 @@ void buzina()
 
 void liga_led()
 {
-  digitalWrite(LED1, HIGH);
-  digitalWrite(LED2, HIGH);
+  digitalWrite(LED, HIGH);
   control = 1;
 }
 
 void apaga_led()
 {
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED2, LOW);
+  digitalWrite(LED, LOW);
   control = 0;
 }
 
@@ -334,36 +331,33 @@ void setup() {
   pinMode(M_B2, OUTPUT);
   pinMode(M_A1, OUTPUT);
   pinMode(M_A2, OUTPUT);
-  pinMode(LED1, OUTPUT);
-  pinMode(LED2, OUTPUT);
+  pinMode(LED, OUTPUT);
   pinMode(buzzer, OUTPUT);
 }
 
 void loop() {
   potValue = analogRead(potPin);
   
-  if(potValue < 30){
-    digitalWrite(LED1, HIGH);
-    digitalWrite(LED2, HIGH);
-  }
-
-  if(potValue > 80 and control == 0){
-    digitalWrite(LED1, LOW);
-    digitalWrite(LED2, LOW);
-  }
+//  if(potValue < 30){
+//    digitalWrite(LED, HIGH);
+//  }
+//
+//  if(potValue > 80 and control == 0){
+//    digitalWrite(LED, LOW);
+//  }
   if (SerialBT.available()) {
     int action = SerialBT.parseInt();
     switch (action)
     {
       case FRENTE:
         robot_frente();
-        delay(200);
+        delay(1000);
         robot_parar();
         break;
 
       case TRAS:
         robot_tras();
-        delay(200);
+        delay(1000);
         robot_parar();
         break;
 
@@ -381,17 +375,13 @@ void loop() {
 
       case PISCA:
         Serial.println("Pisca");
-        digitalWrite(LED1, HIGH);
-        digitalWrite(LED2, HIGH);
+        digitalWrite(LED, HIGH);
         delay(100);
-        digitalWrite(LED1, LOW);
-        digitalWrite(LED2, LOW);
+        digitalWrite(LED, LOW);
         delay(100);
-        digitalWrite(LED1, HIGH);
-        digitalWrite(LED2, HIGH);
+        digitalWrite(LED, HIGH);
         delay(100);
-        digitalWrite(LED1, LOW);
-        digitalWrite(LED2, LOW);
+        digitalWrite(LED, LOW);
         break;
 
       case BUZINA:
